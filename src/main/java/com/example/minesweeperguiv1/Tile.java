@@ -1,21 +1,31 @@
 package com.example.minesweeperguiv1;
 
-public class Tile {
+
+import javafx.scene.control.Button;
+
+public class Tile extends Button {
 
     private boolean isVisible=false;
     private boolean isMine=false;
 
     private int value;
 
+
     private boolean isFlagged=false;
 
     public Tile(int value){
         this.value=value;
+        this.setStyle("-fx-text-fill: transparent; -fx-font-size: 10px;");
+        this.setText(value+"");
 
     }
 
     public void setValue(int value){
+
         this.value=value;
+        this.setText(value+"");
+
+
 
     }
 
@@ -25,7 +35,25 @@ public class Tile {
     }
 
     public void setisFlagged(boolean isFlagged){
-    this.isFlagged=isFlagged;
+        if(!isFlagged){
+            this.isFlagged=isFlagged;
+            this.setStyle("-fx-text-fill: transparent; -fx-font-size: 10px;");
+            if(isMine){
+
+                this.setText("m");
+
+            } else  {
+                this.setText(value+"");
+
+            }
+
+        }else {
+
+            this.isFlagged=isFlagged;
+            this.setStyle("-fx-text-fill: black; -fx-font-size: 10px;");
+            this.setText("f");
+        }
+
 
     }
     public boolean getisFlagged(){
@@ -34,7 +62,16 @@ public class Tile {
     }
 
     public void setisVisible(boolean isVisible){
-        this.isVisible=isVisible;
+        if(isVisible){
+            this.isVisible=isVisible;
+            this.setStyle("-fx-text-fill: black; -fx-font-size: 10px;");
+
+        }else {
+            this.setStyle("-fx-text-fill: transparent; -fx-font-size: 10px;");
+            this.isVisible=isVisible;
+
+        }
+
 
     }
     public boolean getisVisible(){
@@ -43,8 +80,12 @@ public class Tile {
     }
 
     public void setisMine(boolean isMine){
+        if(isMine){
+            this.isMine=isMine;
+            this.setText("m");
 
-        this.isMine=isMine;
+        }
+
     }
     public boolean getisMine(){
         return isMine;
@@ -56,7 +97,7 @@ public class Tile {
             if (isFlagged){
                 System.out.print("f");
             }else {
-            System.out.print("x");}
+                System.out.print("x");}
         }else{
             if(isMine){
                 System.out.print("M");
