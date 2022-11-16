@@ -1,7 +1,9 @@
 package com.example.minesweeperguiv1;
 
 
+
 import javafx.geometry.Point2D;
+import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,11 +24,19 @@ public class Grid {
 
 
     }
+    public Tile[][] getGrid(){
+
+        return grid;
+    }
 
     //iff the tile is not visible then you can flag it
     public void flag(int rowTemp, int colTemp) {
         if (!grid[rowTemp][colTemp].getisVisible()) {
-            grid[rowTemp][colTemp].setisFlagged(true);
+            if (!grid[rowTemp][colTemp].getisFlagged()) {
+                grid[rowTemp][colTemp].setisFlagged(true);
+            }else {
+                grid[rowTemp][colTemp].setisFlagged(false);
+            }
         }
     }
 
@@ -49,6 +59,8 @@ public class Grid {
             for (int colI = 0; colI < col; colI++) {
 
                 grid[rowI][colI] = new Tile(0);
+
+
             }
 
 
@@ -90,8 +102,9 @@ public class Grid {
 
             for (int colI = 0; colI < col; colI++) {
                 if (!grid[rowI][colI].getisVisible()) {
-
-                    if (Math.random() <= 0.20) {
+                    System.out.println("loop");
+                    if (Math.random() <= 0.30) {
+                        System.out.println("mine");
                         grid[rowI][colI].setisMine(true);
 
 
@@ -179,17 +192,18 @@ public class Grid {
 
     // set method to make tiles visible treated diffrently depending on if there is a mine, number>0, 0
     public void setTilesVisible(int tempRow, int tempCol) {
-        if (grid[tempRow][tempCol].getisMine()) {
-            grid[tempRow][tempCol].setisVisible(true);
+        if(!grid[tempRow][tempCol].getisFlagged()) {
+            if (grid[tempRow][tempCol].getisMine()) {
+                grid[tempRow][tempCol].setisVisible(true);
 
-        } else {
-            if (grid[tempRow][tempCol].getValue() == 0) {
-                displayEmpties(tempRow, tempCol);// will set this pos to visible aswell
             } else {
-                setNonMineTileVisible(tempRow, tempCol);
+                if (grid[tempRow][tempCol].getValue() == 0) {
+                    displayEmpties(tempRow, tempCol);// will set this pos to visible aswell
+                } else {
+                    setNonMineTileVisible(tempRow, tempCol);
+                }
             }
         }
-
     }
 
     public boolean isMine(int temprow, int tempCol) {
@@ -227,21 +241,24 @@ public class Grid {
             int[] cordinates = queue.get(0);
 
             if (checkIfNotMineAndNotVisibleAndNotNumbers(cordinates[0] - 1, cordinates[1])) {
-
+                unFlag(cordinates[0] - 1, cordinates[1]);
                 setNonMineTileVisible(cordinates[0] - 1, cordinates[1]);
                 queue.add(new int[]{cordinates[0] - 1, cordinates[1]});
 
             }
             if (checkIfNotMineAndNotVisibleAndNotNumbers(cordinates[0] + 1, cordinates[1])) {
+                unFlag(cordinates[0] + 1, cordinates[1]);
                 setNonMineTileVisible(cordinates[0] + 1, cordinates[1]);
                 queue.add(new int[]{cordinates[0] + 1, cordinates[1]});
             }
             if (checkIfNotMineAndNotVisibleAndNotNumbers(cordinates[0], cordinates[1] - 1)) {
+                unFlag(cordinates[0], cordinates[1] - 1);
                 setNonMineTileVisible(cordinates[0], cordinates[1] - 1);
                 queue.add(new int[]{cordinates[0], cordinates[1] - 1});
 
             }
             if (checkIfNotMineAndNotVisibleAndNotNumbers(cordinates[0], cordinates[1] + 1)) {
+                unFlag(cordinates[0], cordinates[1] + 1);
                 setNonMineTileVisible(cordinates[0], cordinates[1] + 1);
                 queue.add(new int[]{cordinates[0], cordinates[1] + 1});
             }
