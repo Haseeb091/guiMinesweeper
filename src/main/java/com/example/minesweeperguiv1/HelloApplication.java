@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
+    private boolean isFirstClick=true;
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
@@ -40,7 +41,31 @@ public class HelloApplication extends Application {
 
                     @Override
                     public void handle(MouseEvent event) {
-                        
+                        MouseButton button = event.getButton();
+
+
+//
+
+                        //with flags when its set you set it to f if not visible and unflag set text to orginal value might need old printall
+                        if(button==MouseButton.PRIMARY){
+                            System.out.println(GridPane.getRowIndex((Node) event.getSource()));
+                            int rowIndex=GridPane.getRowIndex((Node) event.getSource());
+                            int colIndex=GridPane.getColumnIndex((Node) event.getSource());
+                            if(isFirstClick){
+                                g.firstMoveSetup(rowIndex,colIndex);
+                                isFirstClick=false;
+                            }else {
+                                g.setTilesVisible(rowIndex,colIndex);
+
+
+                            }
+                        }else if(button==MouseButton.SECONDARY){
+                            int rowIndex=GridPane.getRowIndex((Node) event.getSource());
+                            int colIndex=GridPane.getColumnIndex((Node) event.getSource());
+                            g.flag(rowIndex,colIndex);
+
+                        }
+                        System.out.println(g.gameWon());
                     }
                 });
                 gridPane.add(tempGrid[rowI][colI],colI,rowI,1,1);
@@ -55,8 +80,7 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(gridPane, col*22, row*22);
         stage.setScene(scene);
         stage.show();
-    }
-    public void rowColInputPage(Stage stage){
+    }    public void rowColInputPage(Stage stage){
         TextField row=new TextField();
         TextField col=new TextField();
         Button play=new Button("play");
