@@ -3,6 +3,7 @@ package com.example.minesweeperguiv1;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -21,6 +22,37 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Hello!");
+        stage.setScene(scene);
+        stage.show();
+    }
+    public void mainGame(Stage stage,int row,int col){
+
+        stage.setTitle("GridPane Experiment");
+        GridPane gridPane = new GridPane();
+        Grid g=new Grid(row,col);
+        Tile[][] tempGrid=g.getGrid();
+        for (int rowI = 0; rowI < row; rowI++) {
+
+            for (int colI = 0; colI < col; colI++) {
+
+                tempGrid[rowI][colI] = new Tile(0);
+                tempGrid[rowI][colI].setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+                    @Override
+                    public void handle(MouseEvent event) {
+                        
+                    }
+                });
+                gridPane.add(tempGrid[rowI][colI],colI,rowI,1,1);
+            }
+
+
+        }
+
+
+
+
+        Scene scene = new Scene(gridPane, col*22, row*22);
         stage.setScene(scene);
         stage.show();
     }
