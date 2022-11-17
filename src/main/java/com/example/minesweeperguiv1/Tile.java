@@ -63,6 +63,7 @@ public class Tile extends Button {
 
     public void setisVisible(boolean isVisible){
         if(isVisible){
+            System.out.println(this.getText());
             this.isVisible=isVisible;
             this.setStyle("-fx-text-fill: black; -fx-font-size: 10px;");
 

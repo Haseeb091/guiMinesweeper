@@ -1,8 +1,12 @@
 package com.example.minesweeperguiv1;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -13,20 +17,24 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HelloApplication extends Application {
     private boolean isFirstClick=true;
+    private Stage stage;
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
-        stage.show();
+        this.stage=stage;
+        rowColInputPage();
+
+
     }
-    public void mainGame(Stage stage,int row,int col){
+
+    public void mainGame(int row,int col){
 
         stage.setTitle("GridPane Experiment");
         GridPane gridPane = new GridPane();
@@ -56,7 +64,21 @@ public class HelloApplication extends Application {
                                 isFirstClick=false;
                             }else {
                                 g.setTilesVisible(rowIndex,colIndex);
+                                if(g.gameWon()){
 
+
+                                    winPage();
+                                }else if(g.isMine(rowIndex,colIndex)){
+                                    g.showAllMines();
+
+                                    Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(10), ev -> {
+                                        winPage();
+                                    }));
+                                    timeline.setCycleCount(Animation.INDEFINITE);
+                                    timeline.play();
+
+
+                                }
 
                             }
                         }else if(button==MouseButton.SECONDARY){
@@ -80,7 +102,25 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(gridPane, col*22, row*22);
         stage.setScene(scene);
         stage.show();
-    }    public void rowColInputPage(Stage stage){
+    }
+    private void ts(){}
+    public void winPage(){
+        GridPane gridPane = new GridPane();
+        Scene scene =new Scene(new GridPane(), 240, 100);
+        stage.setScene(scene);
+        stage.show();
+    }
+    public void losePage(){
+        Label looseLable=new Label("You lost");
+        GridPane gridPane = new GridPane();
+        gridPane.setAlignment(Pos.CENTER);
+        gridPane.add(looseLable,1,1,10,10);
+        Scene scene =new Scene(gridPane, 240, 100);
+
+        stage.setScene(scene);
+        stage.show();
+    }
+    public void rowColInputPage(){
         TextField row=new TextField();
         TextField col=new TextField();
         Button play=new Button("play");
@@ -90,7 +130,7 @@ public class HelloApplication extends Application {
             public void handle(MouseEvent event) {
                 MouseButton button = event.getButton();
 
-                if(button==MouseButton.PRIMARY){// left click
+                if(button==MouseButton.PRIMARY){
                     try {
                         int rowValue=Integer.parseInt(row.getText());
                         int colValue=Integer.parseInt(col.getText());
@@ -102,7 +142,7 @@ public class HelloApplication extends Application {
 
                             throw new Exception("Not_in_range");
                         }
-                       //start game page
+                        mainGame(rowValue,colValue);
 
                     }catch (NumberFormatException e){
                         Alert notAnumb = new Alert(Alert.AlertType.WARNING);
@@ -142,7 +182,6 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.show();
     }
-
     public static void main(String[] args) {
         launch();
     }
