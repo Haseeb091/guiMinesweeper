@@ -61,6 +61,7 @@ public class Grid {
                 grid[rowI][colI] = new Tile(0);
 
 
+
             }
 
 
@@ -290,24 +291,5 @@ public class Grid {
         }
     }
 
-    public void printAll() {
-        System.out.print("  ");
-        for (int colI = 0; colI < col; colI++) {
-            System.out.print(colI + " ");
 
-        }
-        System.out.println();
-        for (int rowI = 0; rowI < row; rowI++) {
-            System.out.print(rowI + "|");
-            for (int colI = 0; colI < col; colI++) {
-
-                grid[rowI][colI].print();
-                System.out.print(",");
-            }
-
-            System.out.println();
-
-        }
-        System.out.println();
-    }
 }

@@ -1,7 +1,10 @@
 package com.example.minesweeperguiv1;
 
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class Tile extends Button {
 
@@ -17,6 +20,8 @@ public class Tile extends Button {
         this.value=value;
         this.setStyle("-fx-text-fill: transparent; -fx-font-size: 10px;");
         this.setText(value+"");
+        this.setMinSize(40,40);
+        this.setPadding(Insets.EMPTY);//removes all padding
 
     }
 
@@ -37,21 +42,31 @@ public class Tile extends Button {
     public void setisFlagged(boolean isFlagged){
         if(!isFlagged){
             this.isFlagged=isFlagged;
-            this.setStyle("-fx-text-fill: transparent; -fx-font-size: 10px;");
-            if(isMine){
-
-                this.setText("m");
-
-            } else  {
-                this.setText(value+"");
-
-            }
+            this.setGraphic(null);
+//            this.setStyle("-fx-text-fill: transparent; -fx-font-size: 10px;");
+//            if(isMine){
+//
+//                this.setText("m");
+//
+//            } else  {
+//                this.setText(value+"");
+//
+//            }
 
         }else {
 
             this.isFlagged=isFlagged;
-            this.setStyle("-fx-text-fill: black; -fx-font-size: 10px;");
-            this.setText("f");
+//            this.setStyle("-fx-text-fill: black; -fx-font-size: 10px;");
+//            this.setText("f");
+
+            Image img = new Image("icons8-flag-filled-48.png");
+            ImageView view = new ImageView(img);
+            view.setFitHeight(30);// don't change size or will have to change in constructor
+            view.setFitHeight(30);
+            view.setPreserveRatio(true);
+
+
+            this.setGraphic(view);
         }
 
 
@@ -62,13 +77,31 @@ public class Tile extends Button {
     }
 
     public void setisVisible(boolean isVisible){
+
+
         if(isVisible){
-            System.out.println(this.getText());
-            this.isVisible=isVisible;
-            this.setStyle("-fx-text-fill: black; -fx-font-size: 10px;");
+            if(isMine){
+                Image img = new Image("icons8-naval-mine-48.png");
+                ImageView view = new ImageView(img);
+                view.setFitHeight(30);
+                view.setFitHeight(30);
+                view.setPreserveRatio(true);
+                this.setText("");
+
+                this.setGraphic(view);
+
+
+
+            }else {
+                System.out.println(this.getText());
+                this.isVisible=isVisible;
+                this.setStyle("-fx-text-fill: black; -fx-font-size: 10px;");
+
+            }
+
 
         }else {
-            this.setStyle("-fx-text-fill: transparent; -fx-font-size: 10px;");
+            this.setStyle("-fx-text-fill: transparent; -fx-font-size: 10px;");// making the text transparent
             this.isVisible=isVisible;
 
         }
@@ -93,23 +126,6 @@ public class Tile extends Button {
 
     }
 
-    public void print(){
-        if(!isVisible){
-            if (isFlagged){
-                System.out.print("f");
-            }else {
-                System.out.print("x");}
-        }else{
-            if(isMine){
-                System.out.print("M");
 
-            }else {
-                System.out.print(value);
-
-            }
-
-        }
-
-    }
 
 }
