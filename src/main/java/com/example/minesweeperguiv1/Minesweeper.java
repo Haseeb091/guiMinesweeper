@@ -35,6 +35,7 @@ public class Minesweeper extends Application {
     public void mainGame(int row,int col){
 
         clickable=true;
+        isFirstClick=true;
         stage.setTitle("Minesweeper");
         GridPane gridPane = new GridPane();
 
@@ -99,12 +100,12 @@ public class Minesweeper extends Application {
 
 
 
-        Scene scene = new Scene(gridPane, col*45, row*45);
+        Scene scene = new Scene(gridPane, col*20, row*20);
         stage.setScene(scene);
         stage.show();
     }
     public void winPage(){
-        Label winLable=new Label("You lost");
+        Label winLable=new Label("You won");
         Button restart=new Button("restart");
         restart.setOnMouseClicked(event -> {
 
@@ -160,11 +161,11 @@ public class Minesweeper extends Application {
                 try {
                     int rowValue=Integer.parseInt(row.getText());
                     int colValue=Integer.parseInt(col.getText());
-                    if((rowValue < 5 || rowValue > 18)){
+                    if((rowValue < 5 || rowValue > 30)){
 
                         throw new Exception("Not_in_range");
                     }
-                    if((colValue < 5 || colValue > 18)){
+                    if((colValue < 5 || colValue > 30)){
 
                         throw new Exception("Not_in_range");
                     }
@@ -203,7 +204,7 @@ public class Minesweeper extends Application {
         gridPane.add(new Label("col"),1,2,1,1);
         gridPane.add(col,2,2,1,1);
         gridPane.add(play,3,3,1,1);
-        VBox vBox=new VBox(new Label("please enter row and columns below between 5-17"),gridPane);
+        VBox vBox=new VBox(new Label("please enter row and columns below between 5-30"),gridPane);
         vBox.setSpacing(2);
 
         Scene scene =new Scene(vBox, 300, 100);
