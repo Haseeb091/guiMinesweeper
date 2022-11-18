@@ -31,7 +31,7 @@ public class Minesweeper extends Application {
 
 
     }
-// get the 2d array from grid and sets event listner and displays gui grid
+// get the 2d array from grid and sets event listener and displays gui grid
     public void mainGame(int row,int col){
 
         clickable=true;
@@ -54,6 +54,7 @@ public class Minesweeper extends Application {
                             int rowIndex = GridPane.getRowIndex((Node) event.getSource());
                             int colIndex = GridPane.getColumnIndex((Node) event.getSource());
                             if (isFirstClick) {
+                                // if its first click only run if its not flagged
                                 if(!g.getIsFlagged(rowIndex, colIndex)){
                                     g.firstMoveSetup(rowIndex, colIndex);
                                     isFirstClick = false;
@@ -88,7 +89,7 @@ public class Minesweeper extends Application {
 
 
                         }
-                        System.out.println(g.gameWon());
+
                     }
                 });
                 gridPane.add(g.getTile(rowI,colI),colI,rowI,1,1);
@@ -105,7 +106,7 @@ public class Minesweeper extends Application {
         stage.show();
     }
     public void winPage(){
-        Label winLable=new Label("You won");
+        Label winLabel=new Label("You won  ");
         Button restart=new Button("restart");
         restart.setOnMouseClicked(event -> {
 
@@ -120,7 +121,7 @@ public class Minesweeper extends Application {
         });
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
-        gridPane.add(winLable,1,1,1,1);
+        gridPane.add(winLabel,1,1,1,1);
         gridPane.add(restart,2,1,1,1);
         Scene scene =new Scene(gridPane, 240, 100);
 
@@ -128,7 +129,7 @@ public class Minesweeper extends Application {
         stage.show();
     }
     public void losePage(){
-        Label looseLable=new Label("You lost");
+        Label loseLabel=new Label("You lost  ");
         Button restart=new Button("restart");
         restart.setOnMouseClicked(event -> {
 
@@ -143,7 +144,7 @@ public class Minesweeper extends Application {
         });
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
-        gridPane.add(looseLable,1,1,1,1);
+        gridPane.add(loseLabel,1,1,1,1);
         gridPane.add(restart,2,1,1,1);
         Scene scene =new Scene(gridPane, 240, 100);
 
@@ -157,7 +158,7 @@ public class Minesweeper extends Application {
         play.setOnMouseClicked(event -> {
             MouseButton button = event.getButton();
 
-            if(button==MouseButton.PRIMARY){
+            if(button==MouseButton.PRIMARY){// left click
                 try {
                     int rowValue=Integer.parseInt(row.getText());
                     int colValue=Integer.parseInt(col.getText());
@@ -185,7 +186,7 @@ public class Minesweeper extends Application {
                     if(e.toString().contains("Not_in_range")){
 
                         Alert notInRange = new Alert(Alert.AlertType.WARNING);
-                        notInRange.setContentText("please enter valid integers between 5 -17");
+                        notInRange.setContentText("please enter valid integers between 5 -30");
 
                         notInRange.show();
                     }
