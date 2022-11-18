@@ -105,7 +105,7 @@ public class Grid {
             for (int colI = 0; colI < col; colI++) {
                 if (!grid[rowI][colI].getisVisible()) {
 
-                    if (Math.random() <= 0.15) {
+                    if (Math.random() <= 0.05) {
                         minesCount++;
                         grid[rowI][colI].setisMine(true);
 
@@ -302,52 +302,52 @@ public class Grid {
 
     }
 
-    private void recursiveDisplayEmpties(int tempRow, int tempCol) {
-
-
-
-        setNonMineTileVisible(tempRow, tempCol);
-       // has list of all cordinates so no need for multiple if statments
-        ArrayList<int[]> coordinateIncrementList = new ArrayList<int[]>();
-
-        coordinateIncrementList.add(new int[]{-1,0});
-        coordinateIncrementList.add(new int[]{1,0});
-        coordinateIncrementList.add(new int[]{0,-1});
-        coordinateIncrementList.add(new int[]{0,1});
-
-        coordinateIncrementList.add(new int[]{1,1});
-        coordinateIncrementList.add(new int[]{-1,-1});
-        coordinateIncrementList.add(new int[]{1,-1});
-        coordinateIncrementList.add(new int[]{-1,1});
-
-
-            int[] cordinates = new int[]{tempRow,tempCol};
-
-            for (int[] coordinateIncrement:coordinateIncrementList){
-
-                int newCoordinateRow=cordinates[0] +coordinateIncrement[0];
-                int newCoordinateCol=cordinates[1] +coordinateIncrement[1];
-
-                if (checkIfNotMineAndNotVisibleAndNotNumbers(newCoordinateRow, newCoordinateCol)) {
-
-                    unFlag(newCoordinateRow, newCoordinateCol);
-                    setNonMineTileVisible(newCoordinateRow, newCoordinateCol);
-                    recursiveDisplayEmpties(newCoordinateRow,newCoordinateCol);
-
-                }else if (checkIfNotMineAndNotVisible(newCoordinateRow, newCoordinateCol)){
-                    unFlag(newCoordinateRow, newCoordinateCol);
-                    setNonMineTileVisible(newCoordinateRow, newCoordinateCol);
-
-                }
-
-            }
-
-
-
-
-
-
-    }
+//    private void recursiveDisplayEmpties(int tempRow, int tempCol) {
+//
+//
+//
+//        setNonMineTileVisible(tempRow, tempCol);
+//       // has list of all cordinates so no need for multiple if statments
+//        ArrayList<int[]> coordinateIncrementList = new ArrayList<int[]>();
+//
+//        coordinateIncrementList.add(new int[]{-1,0});
+//        coordinateIncrementList.add(new int[]{1,0});
+//        coordinateIncrementList.add(new int[]{0,-1});
+//        coordinateIncrementList.add(new int[]{0,1});
+//
+//        coordinateIncrementList.add(new int[]{1,1});
+//        coordinateIncrementList.add(new int[]{-1,-1});
+//        coordinateIncrementList.add(new int[]{1,-1});
+//        coordinateIncrementList.add(new int[]{-1,1});
+//
+//
+//            int[] cordinates = new int[]{tempRow,tempCol};
+//
+//            for (int[] coordinateIncrement:coordinateIncrementList){
+//
+//                int newCoordinateRow=cordinates[0] +coordinateIncrement[0];
+//                int newCoordinateCol=cordinates[1] +coordinateIncrement[1];
+//
+//                if (checkIfNotMineAndNotVisibleAndNotNumbers(newCoordinateRow, newCoordinateCol)) {
+//
+//                    unFlag(newCoordinateRow, newCoordinateCol);
+//                    setNonMineTileVisible(newCoordinateRow, newCoordinateCol);
+//                    recursiveDisplayEmpties(newCoordinateRow,newCoordinateCol);
+//
+//                }else if (checkIfNotMineAndNotVisible(newCoordinateRow, newCoordinateCol)){
+//                    unFlag(newCoordinateRow, newCoordinateCol);
+//                    setNonMineTileVisible(newCoordinateRow, newCoordinateCol);
+//
+//                }
+//
+//            }
+//
+//
+//
+//
+//
+//
+//    }
 
 
     private boolean checkIfNotMineAndNotVisibleAndNotNumbers(int tempRow, int tempCol) {
