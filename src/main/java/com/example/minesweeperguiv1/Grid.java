@@ -3,7 +3,6 @@ package com.example.minesweeperguiv1;
 
 
 import javafx.geometry.Point2D;
-import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -75,6 +74,7 @@ public class Grid {
 
             for (int colI = 0; colI < col; colI++) {
                 if (grid[rowI][colI].getisMine()) {
+                    unFlag(rowI,colI);
                     setTilesVisible(rowI, colI);
 
                 }
@@ -99,13 +99,14 @@ public class Grid {
 
     // randomly generates mines with the chance of 20 percent
     private void genMines() {
+        int minesCount=0;
         for (int rowI = 0; rowI < row; rowI++) {
 
             for (int colI = 0; colI < col; colI++) {
                 if (!grid[rowI][colI].getisVisible()) {
-                    System.out.println("loop");
+
                     if (Math.random() <= 0.30) {
-                        System.out.println("mine");
+                        minesCount++;
                         grid[rowI][colI].setisMine(true);
 
 
@@ -118,7 +119,9 @@ public class Grid {
 
         }
 
-
+        if (minesCount==0){
+            genMines();
+        }
     }
 
     // checks all positions to get surounding number of mines and sets the value in tile
@@ -193,7 +196,9 @@ public class Grid {
 
     // set method to make tiles visible treated diffrently depending on if there is a mine, number>0, 0
     public void setTilesVisible(int tempRow, int tempCol) {
+
         if(!grid[tempRow][tempCol].getisFlagged()) {
+
             if (grid[tempRow][tempCol].getisMine()) {
                 grid[tempRow][tempCol].setisVisible(true);
 
@@ -230,40 +235,44 @@ public class Grid {
     private void displayEmpties(int tempRow, int tempCol) {
 
 
-        ArrayList<int[]> queue = new ArrayList<int[]>();
+        ArrayList<int[]> emptyToCheck = new ArrayList<int[]>();
 
 
-        queue.add(new int[]{tempRow, tempCol});
+        emptyToCheck.add(new int[]{tempRow, tempCol});
         setNonMineTileVisible(tempRow, tempCol);
         //goes through all adacent tiles and addes them on to list if there not visible and dont have mine or number >0
         // used to display all empty tiles
+        ArrayList<int[]> coordinateIncrementList = new ArrayList<int[]>();
 
-        while (queue.size() != 0) {
-            int[] cordinates = queue.get(0);
+        coordinateIncrementList.add(new int[]{-1,0});
+        coordinateIncrementList.add(new int[]{1,0});
+        coordinateIncrementList.add(new int[]{0,-1});
+        coordinateIncrementList.add(new int[]{0,1});
+        while (!emptyToCheck.isEmpty()) {
+            int[] cordinates = emptyToCheck.get(0);
 
-            if (checkIfNotMineAndNotVisibleAndNotNumbers(cordinates[0] - 1, cordinates[1])) {
-                unFlag(cordinates[0] - 1, cordinates[1]);
-                setNonMineTileVisible(cordinates[0] - 1, cordinates[1]);
-                queue.add(new int[]{cordinates[0] - 1, cordinates[1]});
+            for (int[] coordinateIncrement:coordinateIncrementList){
+
+                int newCoordinateRow=cordinates[0] +coordinateIncrement[0];
+                int newCoordinateCol=cordinates[1] +coordinateIncrement[1];
+
+                if (checkIfNotMineAndNotVisibleAndNotNumbers(newCoordinateRow, newCoordinateCol)) {
+
+                    unFlag(newCoordinateRow, newCoordinateCol);
+                    setNonMineTileVisible(newCoordinateRow, newCoordinateCol);
+                    emptyToCheck.add(new int[]{newCoordinateRow, newCoordinateCol});
+
+                }else if (checkIfNotMineAndNotVisible(newCoordinateRow, newCoordinateCol)){
+                    unFlag(newCoordinateRow, newCoordinateCol);
+                    setNonMineTileVisible(newCoordinateRow, newCoordinateCol);
+
+                }
 
             }
-            if (checkIfNotMineAndNotVisibleAndNotNumbers(cordinates[0] + 1, cordinates[1])) {
-                unFlag(cordinates[0] + 1, cordinates[1]);
-                setNonMineTileVisible(cordinates[0] + 1, cordinates[1]);
-                queue.add(new int[]{cordinates[0] + 1, cordinates[1]});
-            }
-            if (checkIfNotMineAndNotVisibleAndNotNumbers(cordinates[0], cordinates[1] - 1)) {
-                unFlag(cordinates[0], cordinates[1] - 1);
-                setNonMineTileVisible(cordinates[0], cordinates[1] - 1);
-                queue.add(new int[]{cordinates[0], cordinates[1] - 1});
 
-            }
-            if (checkIfNotMineAndNotVisibleAndNotNumbers(cordinates[0], cordinates[1] + 1)) {
-                unFlag(cordinates[0], cordinates[1] + 1);
-                setNonMineTileVisible(cordinates[0], cordinates[1] + 1);
-                queue.add(new int[]{cordinates[0], cordinates[1] + 1});
-            }
-            queue.remove(0);
+
+
+            emptyToCheck.remove(0);
 
         }
 
@@ -272,15 +281,23 @@ public class Grid {
 
     private boolean checkIfNotMineAndNotVisibleAndNotNumbers(int tempRow, int tempCol) {
 
-        if (checkIfInIndex(tempRow, row) && checkIfInIndex(tempCol, col) && !grid[tempRow][tempCol].getisMine()
-                && !grid[tempRow][tempCol].getisVisible() && grid[tempRow][tempCol].getValue() == 0) {
+        if (checkIfNotMineAndNotVisible(tempRow,tempCol)&& grid[tempRow][tempCol].getValue() == 0) {
             return true;
 
 
         }
         return false;
     }
+    private boolean checkIfNotMineAndNotVisible(int tempRow, int tempCol) {
 
+        if (checkIfInIndex(tempRow, row) && checkIfInIndex(tempCol, col) && !grid[tempRow][tempCol].getisMine()
+                && !grid[tempRow][tempCol].getisVisible() ) {
+            return true;
+
+
+        }
+        return false;
+    }
     private boolean checkIfInIndex(int val, int indexMax) {
         //avoiding index out of bounds
 
@@ -289,6 +306,14 @@ public class Grid {
         } else {
             return false;
         }
+    }
+
+    public Tile getTile(int tempRow,int tempCol){
+        if(checkIfInIndex(tempRow,this.row)&&checkIfInIndex(tempCol,this.col)){
+            return grid[tempRow][tempCol];
+        }
+        return null;
+
     }
 
 

@@ -20,7 +20,8 @@ public class Tile extends Button {
         this.value=value;
         this.setStyle("-fx-text-fill: transparent; -fx-font-size: 10px;");
         this.setText(value+"");
-        this.setMinSize(40,40);
+        this.setMinSize(20,20);
+        this.setMaxSize(20,20);
         this.setPadding(Insets.EMPTY);//removes all padding
 
     }
@@ -61,8 +62,8 @@ public class Tile extends Button {
 
             Image img = new Image("icons8-flag-filled-48.png");
             ImageView view = new ImageView(img);
-            view.setFitHeight(30);// don't change size or will have to change in constructor
-            view.setFitHeight(30);
+            view.setFitHeight(20);// don't change size or will have to change in constructor
+            view.setFitHeight(20);
             view.setPreserveRatio(true);
 
 
@@ -83,8 +84,8 @@ public class Tile extends Button {
             if(isMine){
                 Image img = new Image("icons8-naval-mine-48.png");
                 ImageView view = new ImageView(img);
-                view.setFitHeight(30);
-                view.setFitHeight(30);
+                view.setFitHeight(20);
+                view.setFitHeight(20);
                 view.setPreserveRatio(true);
                 this.setText("");
 

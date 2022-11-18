@@ -33,28 +33,31 @@ public class Minesweeper extends Application {
     }
 // get the 2d array from grid and sets event listner and displays gui grid
     public void mainGame(int row,int col){
+
         clickable=true;
-        stage.setTitle("GridPane Experiment");
+        stage.setTitle("Minesweeper");
         GridPane gridPane = new GridPane();
+
         Grid g=new Grid(row,col);
-        Tile[][] tempGrid=g.getGrid();
+
         for (int rowI = 0; rowI < row; rowI++) {
 
             for (int colI = 0; colI < col; colI++) {
-
-                tempGrid[rowI][colI] = new Tile(0);
-                tempGrid[rowI][colI].setOnMouseClicked(event -> {
+                    g.getTile(rowI,colI).setOnMouseClicked(event -> {
                     // if game won or lost then you cant click
                     if(clickable) {
                         MouseButton button = event.getButton();
 
                         if (button == MouseButton.PRIMARY) {
-                            System.out.println(GridPane.getRowIndex((Node) event.getSource()));
+
                             int rowIndex = GridPane.getRowIndex((Node) event.getSource());
                             int colIndex = GridPane.getColumnIndex((Node) event.getSource());
                             if (isFirstClick) {
-                                g.firstMoveSetup(rowIndex, colIndex);
-                                isFirstClick = false;
+                                if(!g.getIsFlagged(rowIndex, colIndex)){
+                                    g.firstMoveSetup(rowIndex, colIndex);
+                                    isFirstClick = false;
+                                }
+
                             } else {
                                 g.setTilesVisible(rowIndex, colIndex);
                                 if (g.gameWon()) {
@@ -64,7 +67,7 @@ public class Minesweeper extends Application {
                                     winTimeline.setCycleCount(1);// keep to 1 otherwise it will repeat
                                     winTimeline.play();
 
-                                } else if (g.isMine(rowIndex, colIndex)) {
+                                } else if (g.isMine(rowIndex, colIndex)&&!g.getIsFlagged(rowIndex,colIndex)) {
                                     clickable=false;
                                     g.showAllMines();
 
@@ -79,13 +82,15 @@ public class Minesweeper extends Application {
                         } else if (button == MouseButton.SECONDARY) {
                             int rowIndex = GridPane.getRowIndex((Node) event.getSource());
                             int colIndex = GridPane.getColumnIndex((Node) event.getSource());
+
                             g.flag(rowIndex, colIndex);
+
 
                         }
                         System.out.println(g.gameWon());
                     }
                 });
-                gridPane.add(tempGrid[rowI][colI],colI,rowI,1,1);
+                gridPane.add(g.getTile(rowI,colI),colI,rowI,1,1);
             }
 
 
@@ -179,7 +184,7 @@ public class Minesweeper extends Application {
                     if(e.toString().contains("Not_in_range")){
 
                         Alert notInRange = new Alert(Alert.AlertType.WARNING);
-                        notInRange.setContentText("please enter valid integers between 5 -29");
+                        notInRange.setContentText("please enter valid integers between 5 -17");
 
                         notInRange.show();
                     }
